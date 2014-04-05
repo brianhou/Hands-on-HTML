@@ -30,7 +30,7 @@ class ProcessInput:
     for x, y, w, h in rects:
       for x2, y2, w2, h2 in rects:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
-          print("Removing contained rectangle")
+          # print("Removing contained rectangle")
           rects.remove((x, y, w, h))
     for i, (x, y, w, h) in enumerate(rects):
       cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
@@ -40,7 +40,6 @@ class ProcessInput:
 
     json_obj = {"num_images": len(image_info), "images": image_info}
     out = json.dumps(json_obj)
-    print out
     return out
 
     # cv2.imshow("img", img)
