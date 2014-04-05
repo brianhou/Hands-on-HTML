@@ -13,7 +13,11 @@ class ProcessInput:
     lower_thresh = np.array([0, 0, 0], dtype=np.uint8)
     upper_thresh = np.array([180, 100, 100], dtype=np.uint8)
     black_mask = cv2.inRange(hsv, lower_thresh, upper_thresh)
-    contours, _ = cv2.findContours(black_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours = cv2.findContours(black_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    if len(contours) == 3:
+      contours = contours[1]
+    else:
+      contours = contours[0]
     # cv2.drawContours(img, contours, -1, (255, 0, 0), 3)
     largest_area = max([cv2.contourArea(contour) for contour in contours])
     rects = []
