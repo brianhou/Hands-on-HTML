@@ -41,7 +41,7 @@ class ProcessInput:
       image_info["i" + repr(len(image_info))] = {"top": y * 1.0 / img.shape[0],
                                      "left": x * 1.0 / img.shape[1],
                                      "width": w * 1.0 / img.shape[1],
-                                     "aspect": w * 1.0 / h,
+                                     "height": h * 1.0 / img.shape[0],
                                      "path": out_img_name}
     self.json_obj["num_images"] = len(image_info)
     self.json_obj["images"] = image_info
