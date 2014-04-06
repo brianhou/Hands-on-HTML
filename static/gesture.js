@@ -17,7 +17,6 @@ function select(elem) {
     console.log(elem);
     if (elem != null) {
         elem.opacity(0.4);
-        elem.moveToTop();
         layer.draw();
         currentElem = elem;
     }
