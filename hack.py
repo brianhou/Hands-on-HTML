@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
   return render_template('index.html')
 
-def generate_page(json_file):
+def generate_body(json_file):
   """Takes in the json representation of the page and returns HTML."""
   jason = json.loads(json_file)
   image0 = {
@@ -31,7 +31,7 @@ def generate_page(json_file):
 def render():
   # uploads image
   img = 'images/test'
-  return generate_page(jsonify(img))
+  return render_template('user.html', content=generate_body(jsonify(img)))
 
 if __name__ == '__main__':
   app.run(debug=True)

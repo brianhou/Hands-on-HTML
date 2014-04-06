@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}
+User Page
+{% endblock %}
+
+{% block body %}
+{% autoescape false %}
+{{ content }}
+{% endautoescape %}
+{% endblock %}

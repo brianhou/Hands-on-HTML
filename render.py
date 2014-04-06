@@ -1,6 +1,7 @@
 from yattag import Doc
 
 def render_json(data):
+  """Returns the contents of the page."""
   doc, tag, text = Doc().tagtext()
   def create_div(photo_id, top, left, width, aspect_ratio, path):
     width = '{}%'.format(100 * width)
