@@ -33,6 +33,7 @@ class GestureRecognition:
       center = (cx, cy)
       cv2.circle(img, center, 5, [0, 0, 255], 2)
 
+      ret_val = ""
       if len(old_pos) < 5:
         old_pos.append((cx, cy))
       elif len(new_pos) < 5:
@@ -41,13 +42,13 @@ class GestureRecognition:
         diff_x = sum([x[0] for x in new_pos]) / len(new_pos) - sum([x[0] for x in old_pos]) / len(old_pos)
         diff_y = sum([x[1] for x in new_pos]) / len(new_pos) - sum([x[1] for x in old_pos]) / len(old_pos)
         if diff_x < -50:
-          print "left"
+          ret_val += "left\n"
         if diff_x > 50:
-          print "right"
+          ret_val += "right\n"
         if diff_y < -50:
-          print "up"
+          ret_val += "up\n"
         if diff_y > 50:
-          print "down"
+          ret_val += "down\n"
         old_pos.pop(0)
         old_pos.append(new_pos.pop(0))
         new_pos.append((cx, cy))
@@ -82,20 +83,23 @@ class GestureRecognition:
         new_dists.append(dist)
       else:
         if np.percentile(np.array(new_dists), 10) > max(old_dists):
-          print "zoom in"
+          ret_val += "zoom in\n"
         if np.percentile(np.array(new_dists), 90) < min(old_dists):
-          print "zoom out"
+          ret_val += "zoom out\n"
         old_dists.pop(0)
         old_dists.append(new_dists.pop(0))
         new_dists.append(dist)
       if rotate:
         if sum([p[0] for p in concave_points]) / len([p[0] for p in concave_points]) > cx:
-          print "rotate left"
+          ret_val += "rotate left\n"
         else:
-          print "rotate right"
+          ret_val += "rotate right\n"
 
       cv2.imshow('input', img)
       cv2.waitKey(3)
+
+      with open("instructions.txt", "w+") as f:
+        f.write(ret_val.strip())
 
   def _get_distance(self, pos1, pos2):
     return (pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2
