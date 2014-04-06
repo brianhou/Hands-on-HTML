@@ -120,4 +120,4 @@ def jsonify(img_name):
 
 
 if __name__ == "__main__":
-  jsonify("images/big_test.jpg")
+  jsonify("images/landmark1.jpg")
