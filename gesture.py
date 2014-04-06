@@ -13,6 +13,8 @@ class GestureRecognition:
     old_dists = []
     new_dists = []
     next_element_last = False
+    locked = True
+    print "Gesture recognition locked...press <space> to unlock"
     while cap.isOpened():
       ret, img = cap.read()
       imageYCrCb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
@@ -106,19 +108,30 @@ class GestureRecognition:
           ret_val = "next element"
 
       cv2.imshow('input', img)
-      cv2.waitKey(3)
+      k = cv2.waitKey(3)
 
-      ret_val = ret_val.strip()
-      if ret_val == "next element":
-        if next_element_last:
-          ret_val = ""
+      # spacebar unlocks gestures
+      if k == 1114089 or k == 1048608:
+        if locked:
+          print "Unlocked gestures"
+          locked = False
         else:
-          next_element_last = True
-      else:
-        next_element_last = False
-      print ret_val
-      with open("static/instructions.txt", "w+") as f:
-        f.write(ret_val)
+          print "Locked gestures"
+          with open("static/instructions.txt", "w+") as f:
+            f.write("")
+          locked = True
+      if not locked:
+        ret_val = ret_val.strip()
+        if ret_val == "next element":
+          if next_element_last:
+            ret_val = ""
+          else:
+            next_element_last = True
+        else:
+          next_element_last = False
+        print ret_val
+        with open("static/instructions.txt", "w+") as f:
+          f.write(ret_val)
 
   def _get_distance(self, pos1, pos2):
     return (pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2
