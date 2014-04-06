@@ -4,6 +4,7 @@ import numpy as np
 class GestureRecognition:
   def recognize(self):
     cap = cv2.VideoCapture(0)
+    state = 0  # States: 0 waiting for gesture, 1 waiting for next move after gesture, 2 waiting for gesture to end
     while cap.isOpened():
       ret, img = cap.read()
       imageYCrCb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
@@ -11,7 +12,7 @@ class GestureRecognition:
       max_YCrCb = np.array([255, 173, 127], np.uint8)
       skinRegion = cv2.inRange(imageYCrCb, min_YCrCb, max_YCrCb)
   
-      _, contours, _ = cv2.findContours(skinRegion, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+      contours, _ = cv2.findContours(skinRegion, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
       cnt = max(contours, key=lambda contour: cv2.contourArea(contour))
       hull = cv2.convexHull(cnt)
       moments = cv2.moments(cnt)
@@ -23,7 +24,6 @@ class GestureRecognition:
       cnt = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
       hull = cv2.convexHull(cnt, returnPoints=False)
       defects = cv2.convexityDefects(cnt, hull)
-      print defects.shape[0]
       for i in range(defects.shape[0]):
         s, e, f, d = defects[i, 0]
         start = tuple(cnt[s][0])

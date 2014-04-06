@@ -13,11 +13,7 @@ class ProcessInput:
     lower_thresh = np.array([0, 0, 0], dtype=np.uint8)
     upper_thresh = np.array([180, 100, 100], dtype=np.uint8)
     black_mask = cv2.inRange(hsv, lower_thresh, upper_thresh)
-    contours = cv2.findContours(black_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    if len(contours) == 3:
-      contours = contours[1]
-    else:
-      contours = contours[0]
+    contours, _ = cv2.findContours(black_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(img, contours, -1, (255, 0, 0), 3)
     largest_area = max([cv2.contourArea(contour) for contour in contours])
     rects = []
@@ -39,11 +35,12 @@ class ProcessInput:
 
     json_obj = {"num_images": len(image_info), "images": image_info}
     out = json.dumps(json_obj)
-    return out
 
     # cv2.imshow("img", img)
     # cv2.imshow("black_mask", black_mask)
     # cv2.waitKey(0)
+
+    return out
 
 def jsonify(fname):
   pi = ProcessInput()
