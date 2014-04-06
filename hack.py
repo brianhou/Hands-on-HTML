@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for
 import json
 
 from process_input import jsonify
-from render import render_json
+# from render import render_json
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ def generate_body(json_file):
     'top': 0,
     'left': 0,
     'width': 0.3,
-    'aspect-ratio': 2,
+    'aspect': 2,
     'path': url_for('static', filename='images/the.jpg')
   }
   for image in jason['images'].values():
@@ -25,7 +25,7 @@ def generate_body(json_file):
     image['path'] = new_img
   # jason['images'][2] = image0
   # jason['num_images'] += 1
-  return render_json(jason)
+  return jason
 
 @app.route('/render/')
 def render():

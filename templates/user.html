@@ -5,7 +5,38 @@ User Page
 {% endblock %}
 
 {% block body %}
-{% autoescape false %}
-{{ content }}
-{% endautoescape %}
+<div id="container"></div>
+<script defer="defer">
+ var stage = new Kinetic.Stage({ container: "container", width: screen.width,
+                                 height: screen.height });
+ var layer = new Kinetic.Layer();
+
+ function drawImage(imageObj, i, x, y, width, height) {
+   var newImg = new Kinetic.Image(
+     {image: imageObj, x: x, y: y, width: width, height: height, draggable: true}
+   );
+
+   // cursor styling
+   newImg.on('mouseover', function() {
+     document.body.style.cursor = 'pointer';});
+   newImg.on('mouseout', function() {
+     document.body.style.cursor = 'default';});
+   layer.add(newImg);
+   stage.add(layer);
+ }
+
+ {% for i in range(content.num_images) %}
+ {% set curr = content.images[i|string()] %}
+ var imageObj = new Image();
+ imageObj.onload = function() {
+   var top = {{ curr.top }} * screen.height;
+   var left = {{ curr.left }} * screen.width;
+   var width = {{ curr.width }} * screen.width;
+   var height = 1 / {{ curr.aspect }} * width;
+   drawImage(this, {{i}}, left, top, width, height);
+ };
+ imageObj.src = '{{ curr.path }}';
+
+ {% endfor %}
+</script>
 {% endblock %}
