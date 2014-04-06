@@ -33,6 +33,11 @@ def render():
   jason = fix_image_links(jason)
   return render_template('user.html', content=jason)
 
+@app.route('/render/instructions')
+def instructions():
+  with open('static/instructions.txt') as f:
+    return f.read()
+
 @app.route('/upload/')
 def upload():
   return render_template('upload.html')

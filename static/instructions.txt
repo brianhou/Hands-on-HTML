@@ -1,0 +1,10 @@
+left
+left
+left
+rotate right
+right
+up
+up
+zoom in
+zoom in
+zoom in
