@@ -91,9 +91,10 @@ class ProcessInput:
         text = f.read().strip()
         if text:
           text_info["t" + repr(len(text_info))] = {"top": y * 1.0 / img.shape[0],
-                                       "left": x * 1.0 / img.shape[1],
-                                       "string": text,
-          "height": float(h) / img.shape[0]}
+                                                   "left": x * 1.0 / img.shape[1],
+                                                   "string": text,
+                                                   "width": w * 1.0 / img.shape[1],
+                                                   "height": h * 1.0 / img.shape[0]}
 
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info

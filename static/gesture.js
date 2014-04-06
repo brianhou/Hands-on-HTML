@@ -79,10 +79,10 @@ function modifyElem(msg) {
         elem.setScaleY(elem.getScaleY()*nzoom);
         break;
     case "rotate right":
-        elem.rotate(deg);
+        elem.rotateDeg(deg);
         break;
     case "rotate left":
-        elem.rotate(-deg);
+        elem.rotateDeg(-deg);
         break;
     }
     layer.draw();
