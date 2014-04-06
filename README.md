@@ -24,10 +24,10 @@ Installation
 
 Running
 =======
-1. 'python hack.py' (set image name at top of file first)
+1. `python hack.py` (set image name at top of file first)
 2. Navigate to http://localhost:5000/render.
-3. 'python gesture.py' (starts gesture pipeline)
+3. `python gesture.py` (starts gesture pipeline)
 
 Libraries Used
 ==============
-OpenCV, TODO
+OpenCV, Flask, KineticJS, jQuery
