@@ -5,7 +5,7 @@ def render_json(data):
   doc, tag, text = Doc().tagtext()
   def create_div(photo_id, top, left, width, aspect_ratio, path):
     width = '{}%'.format(100 * width)
-    with tag('div'):
+    with tag('div', klass="magic"):
       doc.stag('img', width=width, src=path, id=photo_id)
     num_files = data['num_images']
   for image_id, datum in data['images'].items():
