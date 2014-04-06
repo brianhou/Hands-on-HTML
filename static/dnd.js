@@ -6,7 +6,6 @@ if (!Modernizr.draganddrop) {
 
 var dragSource = null;
 function handleDragStart(e) {
-    console.log('handleDragStart');
     this.classList.add('selected');
 
     dragSource = this;
@@ -15,7 +14,6 @@ function handleDragStart(e) {
 }
 
 function handleDragOver(e) {
-    console.log('handleDragOver');
     if (e.preventDefault) {
         e.preventDefault();
     }
@@ -25,17 +23,14 @@ function handleDragOver(e) {
 }
 
 function handleDragEnter(e) {
-    console.log('handleDragEnter');
     this.classList.add('over');
 }
 
 function handleDragLeave(e) {
-    console.log('handleDragLeave');
     this.classList.remove('over');
 }
 
 function handleDrop(e) {
-    console.log('handleDrop');
     if (e.stopPropagation) {
         e.stopPropagation();
     }
@@ -52,11 +47,10 @@ function handleDrop(e) {
 }
 
 function handleDragEnd(e) {
-    console.log('handleDragEnd');
     this.classList.remove('selected');
 }
 
-var magicBoxes = $(".magic");
+var magicBoxes = $('.magic');
 
 $(magicBoxes).each(function( index ) {
     this.addEventListener('dragstart', handleDragStart, false);
