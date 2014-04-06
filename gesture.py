@@ -17,17 +17,23 @@ class GestureRecognition:
       skinRegion = cv2.inRange(imageYCrCb, min_YCrCb, max_YCrCb)
   
       contours, _ = cv2.findContours(skinRegion, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+      if not contours:
+        continue
       cnt = max(contours, key=lambda contour: cv2.contourArea(contour))
       hull = cv2.convexHull(cnt)
       moments = cv2.moments(cnt)
       if moments['m00'] != 0:
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
+      else:
+        continue
       center = (cx, cy)
       cv2.circle(img, center, 5, [0, 0, 255], 2)
       cnt = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
       hull = cv2.convexHull(cnt, returnPoints=False)
       defects = cv2.convexityDefects(cnt, hull)
+      if defects is None:
+        continue
       for i in range(defects.shape[0]):
         s, e, f, d = defects[i, 0]
         start = tuple(cnt[s][0])
