@@ -25,9 +25,10 @@ User Page
    stage.add(layer);
  }
 
- function drawText(textObj, i, x, y, text) {
+ function drawText(text, i, x, y, pt) {
    var newText = new Kinetic.Text(
-     {text: textObj, x: x, y: y, draggable: true}
+     {text: text, x: x, y: y, draggable: true, fill: 'black',
+      fontSize: pt, fontFamily: 'Calibri'}
    );
 
    newText.on('mouseover', function() {
@@ -51,10 +52,11 @@ User Page
  imageObj.src = '{{ curr.path }}';
  {% endfor %}
 
- {% for i in range(content.num_texts) %}
- {% set curr = content.texts[i|string()] %}
- drawText({{curr.string}}, {{i}},
-          {{curr.top}} * screen.height, {{curr.left}} * screen.width);
+ {% for j in range(content.num_texts) %}
+ {% set curr = content.texts[j|string()] %}
+ drawText('{{curr.string}}', {{j}},
+          {{curr.left}} * screen.width, {{curr.top}} * screen.height,
+          {{curr.height}});
  {% endfor %}
 </script>
 {% endblock %}
