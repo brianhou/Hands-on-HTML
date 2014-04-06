@@ -4,8 +4,8 @@ import numpy as np
 import subprocess
 
 IMAGE_AREA_THRESHOLD = 2000
-TEXT_AREA_THRESHOLD = 200
-EROSION_FACTOR = 14
+TEXT_AREA_THRESHOLD = 1000
+EROSION_FACTOR = 15
 
 
 class ProcessInput:
