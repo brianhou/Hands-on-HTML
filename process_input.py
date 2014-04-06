@@ -85,9 +85,11 @@ class ProcessInput:
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
       subprocess.call("tesseract " + out_img_name + " images/out > /dev/null 2>&1", shell=True)
       with open("images/out.txt", "r+") as f:
-        text_info[len(text_info)] = {"top": y * 1.0 / img.shape[0],
-                                     "left": x * 1.0 / img.shape[1],
-                                     "string": f.read().strip()}
+        text = f.read().strip()
+        if text:
+          text_info[len(text_info)] = {"top": y * 1.0 / img.shape[0],
+                                       "left": x * 1.0 / img.shape[1],
+                                       "string": text}
 
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info
