@@ -16,7 +16,7 @@ var currentElem, currentElemIndex = 0;
 function select(elem) {
     console.log(elem);
     if (elem != null) {
-        elem.opacity(0.4);
+        elem.opacity(0.6);
         layer.draw();
         currentElem = elem;
     }
