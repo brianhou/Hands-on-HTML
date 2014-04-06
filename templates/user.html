@@ -40,7 +40,7 @@ User Page
  }
 
  {% for i in range(content.num_images) %}
- {% set curr = content.images[i|string()] %}
+ {% set curr = content.images['t' + i|string()] %}
  var imageObj = new Image();
  imageObj.onload = function() {
    var top = {{ curr.top }} * screen.height;
@@ -53,7 +53,7 @@ User Page
  {% endfor %}
 
  {% for j in range(content.num_texts) %}
- {% set curr = content.texts[j|string()] %}
+ {% set curr = content.texts['t' + j|string()] %}
  drawText('{{curr.string}}', {{j}},
           {{curr.left}} * screen.width, {{curr.top}} * screen.height,
           {{curr.height}});
