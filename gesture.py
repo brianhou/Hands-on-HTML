@@ -10,8 +10,8 @@ class GestureRecognition:
     cap = cv2.VideoCapture(0)
     old_pos = []
     new_pos = []
-    old_dists = []
-    new_dists = []
+    old_areas = []
+    new_areas = []
     next_element_last = False
     locked = True
     print "Gesture recognition locked...press <space> to unlock"
@@ -60,23 +60,19 @@ class GestureRecognition:
           concave_points.append(far)
       if len(concave_points) == 0:
         continue
-      concave_points.sort(key=lambda p: p[0])
-      dist = 0
-      for i in range(1, len(concave_points)):
-        dist += self._get_distance(concave_points[i-1], concave_points[i])
-      dist /= len(concave_points)
-      if len(old_dists) < 10:
-        old_dists.append(dist)
-      if len(new_dists) < 10:
-        new_dists.append(dist)
+      area = cv2.contourArea(cnt)
+      if len(old_areas) < 10:
+        old_areas.append(area)
+      if len(new_areas) < 10:
+        new_areas.append(area)
       else:
-        if np.percentile(np.array(new_dists), 10) > max(old_dists):
+        if np.percentile(np.array(new_areas), 10) > max(old_areas):
           ret_val = "zoom in\n"
-        if np.percentile(np.array(new_dists), 90) < min(old_dists):
+        if np.percentile(np.array(new_areas), 90) < min(old_areas):
           ret_val = "zoom out\n"
-        old_dists.pop(0)
-        old_dists.append(new_dists.pop(0))
-        new_dists.append(dist)
+        old_areas.pop(0)
+        old_areas.append(new_areas.pop(0))
+        new_areas.append(area)
       if rotate:
         if sum([p[0] for p in concave_points]) / len([p[0] for p in concave_points]) > cx:
           ret_val = "rotate left\n"
@@ -117,6 +113,12 @@ class GestureRecognition:
           locked = False
         else:
           print "Locked gestures"
+          # resetting state maintenance variables
+          old_pos = []
+          new_pos = []
+          old_areas = []
+          new_areas = []
+          next_element_last = False
           with open("static/instructions.txt", "w+") as f:
             f.write("")
           locked = True
