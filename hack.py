@@ -30,6 +30,7 @@ def render():
   # uploads image
   img = 'images/test.jpg'
   img = 'images/words.jpg'
+  img = 'images/big_test.jpg'
   jason = json.loads(jsonify(img))
   jason = fix_image_links(jason)
   return render_template('user.html', content=jason)

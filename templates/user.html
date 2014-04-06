@@ -50,7 +50,7 @@ User Page
    var top = {{ curr.top }} * screen.height;
    var left = {{ curr.left }} * screen.width;
    var width = {{ curr.width }} * screen.width;
-   var height = 1 / {{ curr.aspect }} * width;
+   var height = {{ curr.height }} * screen.height;
    drawImage(this, '{{key}}', left, top, width, height);
  };
  imageObj.src = '{{ curr.path }}';
@@ -61,7 +61,7 @@ User Page
  {% set curr = content.texts[key] %}
  drawText('{{curr.string}}', '{{key}}',
           {{curr.left}} * screen.width, {{curr.top}} * screen.height,
-          {{curr.height}});
+          {{curr.height}} * screen.height);
  {% endfor %}
 </script>
 <script src={{url_for('static', filename='app.js')}}></script>
