@@ -3,8 +3,9 @@ import cv2
 import numpy as np
 import subprocess
 
-IMAGE_AREA_THRESHOLD = 20000
+IMAGE_AREA_THRESHOLD = 2000
 TEXT_AREA_THRESHOLD = 200
+EROSION_FACTOR = 15
 
 
 class ProcessInput:
@@ -28,8 +29,9 @@ class ProcessInput:
     image_info = {}
 
     for contour in contours:
-      if cv2.contourArea(contour) > IMAGE_AREA_THRESHOLD:
-        rects.append(cv2.boundingRect(contour))
+      x, y, w, h = cv2.boundingRect(contour)
+      if w * h > IMAGE_AREA_THRESHOLD:
+        rects.append((x, y, w, h))
     self._remove_unwanted_rectangles(rects)
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
@@ -53,7 +55,7 @@ class ProcessInput:
   def _process_for_text(self, img_name, img_rects):
     img = cv2.imread(img_name)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
-    mask = np.ones((30, 30), dtype=np.uint8)
+    mask = np.ones((EROSION_FACTOR, EROSION_FACTOR), dtype=np.uint8)
     img_eroded = cv2.erode(img, mask)
     hsv = cv2.cvtColor(img_eroded, cv2.COLOR_BGR2HSV)
     lower_thresh = np.array([0, 0, 0], dtype=np.uint8)
@@ -65,8 +67,9 @@ class ProcessInput:
     text_info = {}
 
     for contour in contours:
-      if cv2.contourArea(contour) > TEXT_AREA_THRESHOLD:
-        rects.append(cv2.boundingRect(contour))
+      x, y, w, h = cv2.boundingRect(contour)
+      if w * h > TEXT_AREA_THRESHOLD:
+        rects.append((x, y, w, h))
     self._remove_unwanted_rectangles(rects)
     # remove detected rectangles that completely surround image rectangles
     i = 0
@@ -117,4 +120,4 @@ def jsonify(img_name):
 
 
 if __name__ == "__main__":
-  jsonify("images/test.jpg")
+  jsonify("images/big_test.jpg")
