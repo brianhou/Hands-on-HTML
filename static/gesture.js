@@ -66,11 +66,11 @@ function modifyElem(msg) {
     case "right":
         elem.move({x:Math.min(dx, right), y:0});
         break;
-    case "up":
-        elem.move({x:0, y:Math.min(dy, elem.y())});
-        break;
     case "down":
-        elem.move({x:0, y:-Math.min(dy, bottom)});
+        elem.move({x:0, y:Math.min(dy, bottom)});
+        break;
+    case "up":
+        elem.move({x:0, y:-Math.min(dy, elem.y())});
         break;
     case "zoom in":
         var new_scale = Math.min(elem.getScaleX() * pzoom, 1.5);
