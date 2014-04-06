@@ -100,5 +100,6 @@ def jsonify(fname):
   pi.process_for_text(fname)
   return json.dumps(pi.json_obj)
 
+
 if __name__ == "__main__":
   jsonify('images/test.jpg')
