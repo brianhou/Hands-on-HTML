@@ -33,11 +33,12 @@ class ProcessInput:
       if w * h > IMAGE_AREA_THRESHOLD:
         rects.append((x, y, w, h))
     self._remove_unwanted_rectangles(rects)
+    rdelta = 6
     for i, (x, y, w, h) in enumerate(rects):
-      # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
+      # cv2.rectangle(img, (x+rdelta, y+rdelta), (x+w-rdelta, y+h-rdelta), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "images" + repr(i) + img_name[p_index:]
-      cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
+      cv2.imwrite(out_img_name, img[y+rdelta:y+h-rdelta, x+rdelta:x+w-rdelta])
       image_info["i" + repr(len(image_info))] = {"top": y * 1.0 / img.shape[0],
                                      "left": x * 1.0 / img.shape[1],
                                      "width": w * 1.0 / img.shape[1],
@@ -121,4 +122,8 @@ def jsonify(img_name):
 
 
 if __name__ == "__main__":
-  jsonify("images/landmark1.jpg")
+  import sys
+  if sys.argv[1:]:
+    jsonify(sys.argv[1])
+  else:
+    jsonify("images/landmark1.jpg")

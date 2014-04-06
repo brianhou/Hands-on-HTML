@@ -28,6 +28,7 @@ User Page
  function drawImage(imageObj, id, x, y, width, height) {
    var newImg = new Kinetic.Image(
      {image: imageObj, x: x, y: y, width: width, height: height,
+      opacity: 0.9,
       id: id, draggable: true, dragBoundFunc: stayOnCanvas}
    );
 
