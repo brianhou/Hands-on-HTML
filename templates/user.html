@@ -4,8 +4,14 @@
 User Page
 {% endblock %}
 
+{% set font = 'Amarante' %}
+
+{% block head %}
+<link href='http://fonts.googleapis.com/css?family=Amarante' rel='stylesheet' type='text/css'>
+{% endblock %}
+
 {% block body %}
-<div id="container"></div>
+<div id="container" style="font-family:'{{font}}'"></div>
 <script defer="defer">
  var stage = new Kinetic.Stage({ container: "container", width: screen.width,
                                  height: screen.height });
@@ -37,7 +43,7 @@ User Page
  function drawText(text, id, x, y, pt) {
    var newText = new Kinetic.Text(
      {text: text, x: x, y: y,
-      fill: 'black', fontSize: pt, fontFamily: 'Calibri',
+      fill: 'black', fontSize: pt, fontFamily: '{{font}}',
       id: id, draggable: true, dragBoundFunc: stayOnCanvas}
    );
 
