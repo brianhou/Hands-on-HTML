@@ -10,9 +10,7 @@ app = Flask(__name__)
 def index():
   return render_template('index.html')
 
-def generate_body(json_file):
-  """Takes in the json representation of the page and returns HTML."""
-  jason = json.loads(json_file)
+def fix_image_links(jason):
   image0 = {
     'top': 0,
     'left': 0,
@@ -31,7 +29,10 @@ def generate_body(json_file):
 def render():
   # uploads image
   img = 'images/test.jpg'
-  return render_template('user.html', content=generate_body(jsonify(img)))
+  img = 'images/words.jpg'
+  jason = json.loads(jsonify(img))
+  jason = fix_image_links(jason)
+  return render_template('user.html', content=jason)
 
 @app.route('/upload/')
 def upload():

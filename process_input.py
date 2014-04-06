@@ -89,7 +89,8 @@ class ProcessInput:
         if text:
           text_info["t" + repr(len(text_info))] = {"top": y * 1.0 / img.shape[0],
                                        "left": x * 1.0 / img.shape[1],
-                                       "string": text}
+                                       "string": text,
+                                       "height": h}
 
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info
