@@ -11,9 +11,10 @@ User Page
                                  height: screen.height });
  var layer = new Kinetic.Layer();
 
- function drawImage(imageObj, i, x, y, width, height) {
+ function drawImage(imageObj, id, x, y, width, height) {
    var newImg = new Kinetic.Image(
-     {image: imageObj, x: x, y: y, width: width, height: height, draggable: true}
+     {image: imageObj, x: x, y: y, width: width, height: height,
+      id: id, draggable: true}
    );
 
    // cursor styling
@@ -25,12 +26,14 @@ User Page
    stage.add(layer);
  }
 
- function drawText(text, i, x, y, pt) {
+ function drawText(text, id, x, y, pt) {
    var newText = new Kinetic.Text(
-     {text: text, x: x, y: y, draggable: true, fill: 'black',
-      fontSize: pt, fontFamily: 'Calibri'}
+     {text: text, x: x, y: y,
+      fill: 'black', fontSize: pt, fontFamily: 'Calibri',
+      id: id, draggable: true}
    );
 
+   // cursor styling
    newText.on('mouseover', function() {
      document.body.style.cursor = 'pointer';});
    newText.on('mouseout', function() {
@@ -40,23 +43,26 @@ User Page
  }
 
  {% for i in range(content.num_images) %}
- {% set curr = content.images['t' + i|string()] %}
+ {% set key = 'i' + i|string() %}
+ {% set curr = content.images[key] %}
  var imageObj = new Image();
  imageObj.onload = function() {
    var top = {{ curr.top }} * screen.height;
    var left = {{ curr.left }} * screen.width;
    var width = {{ curr.width }} * screen.width;
    var height = 1 / {{ curr.aspect }} * width;
-   drawImage(this, {{i}}, left, top, width, height);
+   drawImage(this, '{{key}}', left, top, width, height);
  };
  imageObj.src = '{{ curr.path }}';
  {% endfor %}
 
  {% for j in range(content.num_texts) %}
- {% set curr = content.texts['t' + j|string()] %}
- drawText('{{curr.string}}', {{j}},
+ {% set key = 't' + j|string() %}
+ {% set curr = content.texts[key] %}
+ drawText('{{curr.string}}', '{{key}}',
           {{curr.left}} * screen.width, {{curr.top}} * screen.height,
           {{curr.height}});
  {% endfor %}
 </script>
+<script src={{url_for('static', filename='app.js')}}></script>
 {% endblock %}
