@@ -26,15 +26,7 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > IMAGE_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    i = 0
-    while i < len(rects):
-      x, y, w, h = rects[i]
-      i += 1
-      for x2, y2, w2, h2 in rects:
-        if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
-          rects.remove((x, y, w, h))
-          i -= 1
-          break
+    self.remove_unwanted_rectangles(rects)
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
@@ -69,15 +61,7 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > TEXT_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    i = 0
-    while i < len(rects):
-      x, y, w, h = rects[i]
-      i += 1
-      for x2, y2, w2, h2 in rects:
-        if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
-          rects.remove((x, y, w, h))
-          i -= 1
-          break
+    self.remove_unwanted_rectangles(rects)
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
@@ -98,6 +82,17 @@ class ProcessInput:
     # cv2.imshow("img", img)
     # cv2.imshow("black_mask", black_mask)
     # cv2.waitKey(0)
+
+  def remove_unwanted_rectangles(self, rects):
+    i = 0
+    while i < len(rects):
+      x, y, w, h = rects[i]
+      i += 1
+      for x2, y2, w2, h2 in rects:
+        if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
+          rects.remove((x, y, w, h))
+          i -= 1
+          break
 
 def jsonify(fname):
   pi = ProcessInput()
