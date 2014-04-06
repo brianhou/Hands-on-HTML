@@ -12,18 +12,6 @@ function selectElemByTag(tag) {
 }
 
 var currentElem, currentElemIndex = 0;
-var grabbed = true;
-
-$(document).click(function (evt) {
-    grabbed = !grabbed;
-    console.log(grabbed);
-    if (!grabbed) {
-        unselect(currentElem);
-    } else {
-        select(currentElem);
-    }
-    return false;
-});
 
 function select(elem) {
     console.log(elem);
@@ -44,13 +32,8 @@ function unselect(elem) {
 }
 
 function modifyElem(msg) {
-    if (!grabbed) { // only perform actions if element is grabbed
-        console.log("hey you ain't grabbin' anything");
-        return;
-    }
-
     var elem = layer.children[currentElemIndex];
-    var dx = 10, dy = 10, pzoom = 10/9, nzoom = 9/10, deg = 5;
+    var dx = 10, dy = 10, pzoom = 20/19, nzoom = 19/20, deg = 1;
     var right = screen.width - elem.width() - elem.x();
     var bottom = screen.height - elem.height() - elem.y();
 
