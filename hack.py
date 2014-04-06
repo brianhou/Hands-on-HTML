@@ -4,7 +4,7 @@ import json
 from process_input import jsonify
 # from render import render_json
 
-IMAGE_NAME = 'images/landmark1.jpg'
+IMAGE_NAME = 'images/demo.jpg'
 
 app = Flask(__name__)
 

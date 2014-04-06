@@ -126,4 +126,4 @@ if __name__ == "__main__":
   if sys.argv[1:]:
     jsonify(sys.argv[1])
   else:
-    jsonify("images/landmark1.jpg")
+    jsonify("images/demo.jpg")
