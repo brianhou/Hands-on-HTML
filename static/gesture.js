@@ -17,6 +17,7 @@ function select(elem) {
     console.log(elem);
     if (elem != null) {
         elem.opacity(0.4);
+        elem.moveToTop();
         layer.draw();
         currentElem = elem;
     }
@@ -25,7 +26,7 @@ function select(elem) {
 function unselect(elem) {
     console.log(elem);
     if (elem != null) {
-        elem.opacity(1);
+        elem.opacity(0.9);
         layer.draw();
         currentElem = null;
     }
