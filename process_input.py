@@ -79,7 +79,7 @@ class ProcessInput:
           i -= 1
           break
     for i, (x, y, w, h) in enumerate(rects):
-      cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
+      # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "text" + repr(i) + img_name[p_index:]
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
@@ -95,9 +95,9 @@ class ProcessInput:
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info
 
-    cv2.imshow("img", img)
+    # cv2.imshow("img", img)
     # cv2.imshow("black_mask", black_mask)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
 
   def _remove_unwanted_rectangles(self, rects):
     i = 0
