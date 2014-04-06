@@ -26,10 +26,14 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > IMAGE_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    for x, y, w, h in rects:
+    i = 0
+    while i < len(rects):
+      x, y, w, h = rects[i]
+      i += 1
       for x2, y2, w2, h2 in rects:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
           rects.remove((x, y, w, h))
+          break
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
@@ -64,16 +68,20 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > TEXT_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    for x, y, w, h in rects:
+    i = 0
+    while i < len(rects):
+      x, y, w, h = rects[i]
+      i += 1
       for x2, y2, w2, h2 in rects:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
           rects.remove((x, y, w, h))
+          break
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "text" + repr(i) + img_name[p_index:]
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
-      subprocess.call("tesseract " + out_img_name + " images/out > /dev/null", shell=True)
+      subprocess.call("tesseract " + out_img_name + " images/out > /dev/null 2>&1", shell=True)
       with open("images/out.txt", "r+") as f:
         text_info[len(text_info)] = {"top": y * 1.0 / img.shape[0],
                                      "left": x * 1.0 / img.shape[1],
@@ -81,11 +89,10 @@ class ProcessInput:
 
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info
-    print self.json_obj
 
-    cv2.imshow("img", img)
+    # cv2.imshow("img", img)
     # cv2.imshow("black_mask", black_mask)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
 
 def jsonify(fname):
   pi = ProcessInput()
@@ -94,4 +101,4 @@ def jsonify(fname):
   return json.dumps(pi.json_obj)
 
 if __name__ == "__main__":
-  jsonify('images/words.jpg')
+  jsonify('images/test.jpg')
