@@ -42,13 +42,13 @@ class GestureRecognition:
         diff_x = sum([x[0] for x in new_pos]) / len(new_pos) - sum([x[0] for x in old_pos]) / len(old_pos)
         diff_y = sum([x[1] for x in new_pos]) / len(new_pos) - sum([x[1] for x in old_pos]) / len(old_pos)
         if diff_x < -50:
-          ret_val += "left\n"
-        if diff_x > 50:
           ret_val += "right\n"
+        if diff_x > 50:
+          ret_val += "left\n"
         if diff_y < -50:
-          ret_val += "up\n"
-        if diff_y > 50:
           ret_val += "down\n"
+        if diff_y > 50:
+          ret_val += "up\n"
         old_pos.pop(0)
         old_pos.append(new_pos.pop(0))
         new_pos.append((cx, cy))
@@ -99,10 +99,9 @@ class GestureRecognition:
       cv2.waitKey(3)
 
       ret_val = ret_val.strip()
-      if ret_val:
-        with open("static/instructions.txt", "w+") as f:
-          print ret_val
-          f.write(ret_val)
+      print ret_val
+      with open("static/instructions.txt", "w+") as f:
+        f.write(ret_val)
 
   def _get_distance(self, pos1, pos2):
     return (pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2
