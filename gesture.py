@@ -12,6 +12,7 @@ class GestureRecognition:
     new_pos = []
     old_dists = []
     new_dists = []
+    next_element_last = False
     while cap.isOpened():
       ret, img = cap.read()
       imageYCrCb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
@@ -74,34 +75,47 @@ class GestureRecognition:
           cv2.circle(img, far, 5, [0, 0, 255], -1)
           concave_starts_ends.append((start, end))
           concave_points.append(far)
-      if len(concave_points) > 0:
-        concave_points.sort(key=lambda p: p[0])
-        dist = 0
-        for i in range(1, len(concave_points)):
-          dist += self._get_distance(concave_points[i-1], concave_points[i])
-        dist /= len(concave_points)
-        if len(old_dists) < 10:
-          old_dists.append(dist)
-        if len(new_dists) < 10:
-          new_dists.append(dist)
+      if len(concave_points) == 0:
+        continue
+      concave_points.sort(key=lambda p: p[0])
+      dist = 0
+      for i in range(1, len(concave_points)):
+        dist += self._get_distance(concave_points[i-1], concave_points[i])
+      dist /= len(concave_points)
+      if len(old_dists) < 10:
+        old_dists.append(dist)
+      if len(new_dists) < 10:
+        new_dists.append(dist)
+      else:
+        if np.percentile(np.array(new_dists), 10) > max(old_dists):
+          ret_val += "zoom in\n"
+        if np.percentile(np.array(new_dists), 90) < min(old_dists):
+          ret_val += "zoom out\n"
+        old_dists.pop(0)
+        old_dists.append(new_dists.pop(0))
+        new_dists.append(dist)
+      if rotate:
+        if sum([p[0] for p in concave_points]) / len([p[0] for p in concave_points]) > cx:
+          ret_val += "rotate left\n"
         else:
-          if np.percentile(np.array(new_dists), 10) > max(old_dists):
-            ret_val += "zoom in\n"
-          if np.percentile(np.array(new_dists), 90) < min(old_dists):
-            ret_val += "zoom out\n"
-          old_dists.pop(0)
-          old_dists.append(new_dists.pop(0))
-          new_dists.append(dist)
-        if rotate:
-          if sum([p[0] for p in concave_points]) / len([p[0] for p in concave_points]) > cx:
-            ret_val += "rotate left\n"
-          else:
-            ret_val += "rotate right\n"
+          ret_val += "rotate right\n"
+      if len(concave_points) == 1:
+        start, end = concave_starts_ends[0]
+        if end[0] != start[0] and (end[1] - start[1]) * 1.0 / (end[0] - start[0]) > 0:
+          # discard ret_val and make it solely "next element"
+          ret_val = "next element"
 
       cv2.imshow('input', img)
       cv2.waitKey(3)
 
       ret_val = ret_val.strip()
+      if ret_val == "next element":
+        if next_element_last:
+          ret_val = ""
+        else:
+          next_element_last = True
+      else:
+        next_element_last = False
       print ret_val
       with open("static/instructions.txt", "w+") as f:
         f.write(ret_val)
