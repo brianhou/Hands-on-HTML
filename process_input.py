@@ -5,7 +5,7 @@ import subprocess
 
 IMAGE_AREA_THRESHOLD = 2000
 TEXT_AREA_THRESHOLD = 200
-EROSION_FACTOR = 15
+EROSION_FACTOR = 14
 
 
 class ProcessInput:
