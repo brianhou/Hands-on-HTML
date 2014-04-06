@@ -25,6 +25,19 @@ User Page
    stage.add(layer);
  }
 
+ function drawText(textObj, i, x, y, text) {
+   var newText = new Kinetic.Text(
+     {text: textObj, x: x, y: y, draggable: true}
+   );
+
+   newText.on('mouseover', function() {
+     document.body.style.cursor = 'pointer';});
+   newText.on('mouseout', function() {
+     document.body.style.cursor = 'default';})
+   layer.add(newText);
+   stage.add(layer);
+ }
+
  {% for i in range(content.num_images) %}
  {% set curr = content.images[i|string()] %}
  var imageObj = new Image();
@@ -36,7 +49,12 @@ User Page
    drawImage(this, {{i}}, left, top, width, height);
  };
  imageObj.src = '{{ curr.path }}';
+ {% endfor %}
 
+ {% for i in range(content.num_texts) %}
+ {% set curr = content.texts[i|string()] %}
+ drawText({{curr.string}}, {{i}},
+          {{curr.top}} * screen.height, {{curr.left}} * screen.width);
  {% endfor %}
 </script>
 {% endblock %}
