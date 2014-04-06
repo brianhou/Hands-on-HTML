@@ -33,6 +33,7 @@ class ProcessInput:
       for x2, y2, w2, h2 in rects:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
           rects.remove((x, y, w, h))
+          i -= 1
           break
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
@@ -75,6 +76,7 @@ class ProcessInput:
       for x2, y2, w2, h2 in rects:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
           rects.remove((x, y, w, h))
+          i -= 1
           break
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
