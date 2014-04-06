@@ -32,7 +32,7 @@ class ProcessInput:
         if x > x2 and x + w < x2 + w2 and y > y2 and y + h < y2 + h2:
           rects.remove((x, y, w, h))
     for i, (x, y, w, h) in enumerate(rects):
-      cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
+      # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       out_img_name = jpg_name + "_out%d.jpg"%i
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
       image_info[len(image_info)] = {"top": y, "left": x, "width": w * 1.0 / img.shape[1], "aspect-ratio": w * 1.0 / h, "path": out_img_name}
