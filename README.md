@@ -30,4 +30,8 @@ Running
 
 Libraries Used
 ==============
-OpenCV, Flask, KineticJS, jQuery
++ OpenCV - image processing and gesture classification
++ Tesseract- OCR
++ Flask - serve the page
++ KineticJS - drag and drop of elements
++ jQuery - because what else are you going to use?
