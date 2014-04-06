@@ -30,7 +30,7 @@ def generate_body(json_file):
 @app.route('/render/')
 def render():
   # uploads image
-  img = 'images/test'
+  img = 'images/test.jpg'
   return render_template('user.html', content=generate_body(jsonify(img)))
 
 if __name__ == '__main__':
