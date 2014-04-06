@@ -2,13 +2,10 @@ import cv2
 import numpy as np
 
 class GestureRecognition:
-  def __init__(self):
-    self.old_pos = []
-    self.new_pos = []
-
   def recognize(self):
     cap = cv2.VideoCapture(0)
-    state = 0  # States: 0 waiting for gesture, 1 waiting for next move after gesture, 2 waiting for gesture to end
+    old_pos = []
+    new_pos = []
     while cap.isOpened():
       ret, img = cap.read()
       imageYCrCb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
@@ -29,6 +26,26 @@ class GestureRecognition:
         continue
       center = (cx, cy)
       cv2.circle(img, center, 5, [0, 0, 255], 2)
+
+      if len(old_pos) < 5:
+        old_pos.append((cx, cy))
+      elif len(new_pos) < 5:
+        new_pos.append((cx, cy))
+      else:
+        diff_x = sum([x[0] for x in new_pos]) / len(new_pos) - sum([x[0] for x in old_pos]) / len(old_pos)
+        diff_y = sum([x[1] for x in new_pos]) / len(new_pos) - sum([x[1] for x in old_pos]) / len(old_pos)
+        if diff_x < -50:
+          print "left"
+        if diff_x > 50:
+          print "right"
+        if diff_y < -50:
+          print "up"
+        if diff_y > 50:
+          print "down"
+        old_pos.pop(0)
+        old_pos.append(new_pos.pop(0))
+        new_pos.append((cx, cy))
+
       cnt = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
       hull = cv2.convexHull(cnt, returnPoints=False)
       defects = cv2.convexityDefects(cnt, hull)
@@ -42,25 +59,6 @@ class GestureRecognition:
         dist = cv2.pointPolygonTest(cnt, center, True)
         cv2.line(img, start, end, [0, 255, 0], 2)
         cv2.circle(img, far, 5, [0, 0, 255], -1)
-
-      if len(self.old_pos) < 5:
-        self.old_pos.append((cx, cy))
-      elif len(self.new_pos) < 5:
-        self.new_pos.append((cx, cy))
-      else:
-        diff_x = sum([x[0] for x in self.new_pos]) / len(self.new_pos) - sum([x[0] for x in self.old_pos]) / len(self.old_pos)
-        diff_y = sum([x[1] for x in self.new_pos]) / len(self.new_pos) - sum([x[1] for x in self.old_pos]) / len(self.old_pos)
-        if diff_x < -50:
-          print "left"
-        if diff_x > 50:
-          print "right"
-        if diff_y < -50:
-          print "up"
-        if diff_y > 50:
-          print "down"
-        self.old_pos.pop(0)
-        self.old_pos.append(self.new_pos.pop(0))
-        self.new_pos.append((cx, cy))
 
       cv2.imshow('input', img)
       cv2.waitKey(3)
