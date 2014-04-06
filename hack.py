@@ -4,6 +4,8 @@ import json
 from process_input import jsonify
 # from render import render_json
 
+IMAGE_NAME = 'images/landmark1.jpg'
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -28,8 +30,7 @@ def fix_image_links(jason):
 @app.route('/render/')
 def render():
   # uploads image
-  img = 'images/landmark1.jpg'
-  jason = json.loads(jsonify(img))
+  jason = json.loads(jsonify(IMAGE_NAME))
   jason = fix_image_links(jason)
   return render_template('user.html', content=jason)
 
