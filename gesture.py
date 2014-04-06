@@ -98,7 +98,7 @@ class GestureRecognition:
       cv2.imshow('input', img)
       cv2.waitKey(3)
 
-      with open("instructions.txt", "w+") as f:
+      with open("static/instructions.txt", "w+") as f:
         f.write(ret_val.strip())
 
   def _get_distance(self, pos1, pos2):
