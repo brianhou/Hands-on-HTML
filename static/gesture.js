@@ -87,3 +87,5 @@ function modifyElem(msg) {
     }
     layer.draw();
 }
+
+modifyElem('next element');
