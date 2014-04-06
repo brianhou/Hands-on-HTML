@@ -111,7 +111,7 @@ class GestureRecognition:
       k = cv2.waitKey(3)
 
       # spacebar unlocks gestures
-      if k == 1114089 or k == 1048608:
+      if k == 1048608:
         if locked:
           print "Unlocked gestures"
           locked = False
