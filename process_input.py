@@ -11,7 +11,11 @@ class ProcessInput:
   def __init__(self):
     self.json_obj = {}
 
-  def process_for_images(self, img_name):
+  def execute(self, img_name):
+    img_rects = self._process_for_images(img_name)
+    self._process_for_text(img_name, img_rects)
+
+  def _process_for_images(self, img_name):
     img = cv2.imread(img_name)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -26,7 +30,7 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > IMAGE_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    self.remove_unwanted_rectangles(rects)
+    self._remove_unwanted_rectangles(rects)
     for i, (x, y, w, h) in enumerate(rects):
       # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
@@ -44,7 +48,9 @@ class ProcessInput:
     # cv2.imshow("black_mask", black_mask)
     # cv2.waitKey(0)
 
-  def process_for_text(self, img_name):
+    return rects
+
+  def _process_for_text(self, img_name, img_rects):
     img = cv2.imread(img_name)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     mask = np.ones((30, 30), dtype=np.uint8)
@@ -61,9 +67,19 @@ class ProcessInput:
     for contour in contours:
       if cv2.contourArea(contour) > TEXT_AREA_THRESHOLD:
         rects.append(cv2.boundingRect(contour))
-    self.remove_unwanted_rectangles(rects)
+    self._remove_unwanted_rectangles(rects)
+    # remove detected rectangles that completely surround image rectangles
+    i = 0
+    while i < len(rects):
+      x, y, w, h = rects[i]
+      i += 1
+      for x2, y2, w2, h2 in img_rects:
+        if x < x2 and x + w > x2 + w2 and y < y2 and y + h > y2 + h2:
+          rects.remove((x, y, w, h))
+          i -= 1
+          break
     for i, (x, y, w, h) in enumerate(rects):
-      # cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
+      cv2.rectangle(img, (x, y), (x+w, y+h), color=(0, 0, 255), thickness=3)
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "text" + repr(i) + img_name[p_index:]
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
@@ -79,11 +95,11 @@ class ProcessInput:
     self.json_obj["num_texts"] = len(text_info)
     self.json_obj["texts"] = text_info
 
-    # cv2.imshow("img", img)
+    cv2.imshow("img", img)
     # cv2.imshow("black_mask", black_mask)
-    # cv2.waitKey(0)
+    cv2.waitKey(0)
 
-  def remove_unwanted_rectangles(self, rects):
+  def _remove_unwanted_rectangles(self, rects):
     i = 0
     while i < len(rects):
       x, y, w, h = rects[i]
@@ -94,12 +110,11 @@ class ProcessInput:
           i -= 1
           break
 
-def jsonify(fname):
+def jsonify(img_name):
   pi = ProcessInput()
-  pi.process_for_images(fname)
-  pi.process_for_text(fname)
+  pi.execute(img_name)
   return json.dumps(pi.json_obj)
 
 
 if __name__ == "__main__":
-  jsonify('images/test.jpg')
+  jsonify("images/test.jpg")

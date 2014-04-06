@@ -64,13 +64,13 @@ class GestureRecognition:
         end = tuple(cnt[e][0])
         far = tuple(cnt[f][0])
         concave_points.append(far)
-        if self.get_distance(far, (cx, cy)) < PALM_CONCAVITY_DIST_THRESH:
+        if self._get_distance(far, (cx, cy)) < PALM_CONCAVITY_DIST_THRESH:
           cv2.line(img, start, end, [0, 255, 0], 2)
           cv2.circle(img, far, 5, [0, 0, 255], -1)
       concave_points.sort(key=lambda p: p[0])
       dist = 0
       for i in range(1, len(concave_points)):
-        dist += self.get_distance(concave_points[i-1], concave_points[i])
+        dist += self._get_distance(concave_points[i-1], concave_points[i])
       dist /= len(concave_points)
       if len(old_dists) < 10:
         old_dists.append(dist)
@@ -88,7 +88,7 @@ class GestureRecognition:
       cv2.imshow('input', img)
       cv2.waitKey(3)
 
-  def get_distance(self, pos1, pos2):
+  def _get_distance(self, pos1, pos2):
     return (pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2
 
 
