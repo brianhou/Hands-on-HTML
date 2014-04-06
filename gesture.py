@@ -58,6 +58,7 @@ class GestureRecognition:
       defects = cv2.convexityDefects(cnt, hull)
       if defects is None:
         continue
+      concave_starts_ends = []
       concave_points = []
       rotate = False
       for i in range(defects.shape[0]):
@@ -65,13 +66,14 @@ class GestureRecognition:
         start = tuple(cnt[s][0])
         end = tuple(cnt[e][0])
         far = tuple(cnt[f][0])
-        concave_points.append(far)
         if self._get_distance(far, (cx, cy)) < PALM_CONCAVITY_DIST_THRESH:
           cv2.line(img, start, end, [0, 255, 0], 2)
           if end[0] != start[0]:
             if abs((end[1] - start[1]) * 1.0 / (end[0] - start[0])) < 0.1:
               rotate = True
           cv2.circle(img, far, 5, [0, 0, 255], -1)
+          concave_starts_ends.append((start, end))
+          concave_points.append(far)
       concave_points.sort(key=lambda p: p[0])
       dist = 0
       for i in range(1, len(concave_points)):
