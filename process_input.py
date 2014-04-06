@@ -40,7 +40,7 @@ class ProcessInput:
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "images" + repr(i) + img_name[p_index:]
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
-      image_info[len(image_info)] = {"top": y * 1.0 / img.shape[0],
+      image_info["i" + repr(len(image_info))] = {"top": y * 1.0 / img.shape[0],
                                      "left": x * 1.0 / img.shape[1],
                                      "width": w * 1.0 / img.shape[1],
                                      "aspect": w * 1.0 / h,
@@ -87,7 +87,7 @@ class ProcessInput:
       with open("images/out.txt", "r+") as f:
         text = f.read().strip()
         if text:
-          text_info[len(text_info)] = {"top": y * 1.0 / img.shape[0],
+          text_info["t" + repr(len(text_info))] = {"top": y * 1.0 / img.shape[0],
                                        "left": x * 1.0 / img.shape[1],
                                        "string": text}
 
