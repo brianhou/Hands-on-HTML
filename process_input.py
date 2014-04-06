@@ -31,7 +31,11 @@ class ProcessInput:
       p_index = img_name.find(".")
       out_img_name = img_name[:p_index] + "images" + repr(i) + img_name[p_index:]
       cv2.imwrite(out_img_name, img[y:y+h, x:x+w])
-      image_info[len(image_info)] = {"top": y, "left": x, "width": w * 1.0 / img.shape[1], "aspect-ratio": w * 1.0 / h, "path": out_img_name}
+      image_info[len(image_info)] = {"top": y * 1.0 / img.shape[0],
+                                     "left": x * 1.0 / img.shape[1],
+                                     "width": w * 1.0 / img.shape[1],
+                                     "aspect": w * 1.0 / h,
+                                     "path": out_img_name}
     json_obj = {"num_images": len(image_info), "images": image_info}
 
     # cv2.imshow("img", img)
@@ -72,7 +76,7 @@ class ProcessInput:
 
 def jsonify(fname):
   pi = ProcessInput()
-  return pi.process_for_text(fname)
+  return pi.process_for_images(fname)
 
 if __name__ == "__main__":
-  jsonify('images/words.jpg')
+  jsonify('images/test.jpg')
