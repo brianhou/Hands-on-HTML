@@ -11,10 +11,18 @@ User Page
                                  height: screen.height });
  var layer = new Kinetic.Layer();
 
+ function stayOnCanvas(pos) {
+   var width = this.width() || 0;
+   var height = this.height() || 0;
+   var x = Math.max(0, Math.min(screen.width - width, pos.x));
+   var y = Math.max(0, Math.min(screen.height - height, pos.y));
+   return { x: x, y: y }
+ }
+
  function drawImage(imageObj, id, x, y, width, height) {
    var newImg = new Kinetic.Image(
      {image: imageObj, x: x, y: y, width: width, height: height,
-      id: id, draggable: true}
+      id: id, draggable: true, dragBoundFunc: stayOnCanvas}
    );
 
    // cursor styling
@@ -30,7 +38,7 @@ User Page
    var newText = new Kinetic.Text(
      {text: text, x: x, y: y,
       fill: 'black', fontSize: pt, fontFamily: 'Calibri',
-      id: id, draggable: true}
+      id: id, draggable: true, dragBoundFunc: stayOnCanvas}
    );
 
    // cursor styling

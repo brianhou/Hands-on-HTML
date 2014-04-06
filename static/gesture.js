@@ -51,6 +51,8 @@ function modifyElem(msg) {
 
     var elem = layer.children[currentElemIndex];
     var dx = 10, dy = 10, pzoom = 10/9, nzoom = 9/10, deg = 5;
+    var right = screen.width - elem.width() - elem.x();
+    var bottom = screen.height - elem.height() - elem.y();
 
     switch (msg) {
     case "next element":
@@ -59,24 +61,26 @@ function modifyElem(msg) {
         select(layer.children[currentElemIndex]);
         break;
     case "left":
-        elem.move({x:-dx, y:0});
+        elem.move({x:-Math.min(dx, elem.x()), y:0});
         break;
     case "right":
-        elem.move({x:dx, y:0});
+        elem.move({x:Math.min(dx, right), y:0});
         break;
     case "up":
-        elem.move({x:0, y:dy});
+        elem.move({x:0, y:Math.min(dy, elem.y())});
         break;
     case "down":
-        elem.move({x:0, y:-dy});
+        elem.move({x:0, y:-Math.min(dy, bottom)});
         break;
     case "zoom in":
-        elem.setScaleX(elem.getScaleX()*pzoom);
-        elem.setScaleY(elem.getScaleY()*pzoom);
+        var new_scale = Math.min(elem.getScaleX() * pzoom, 1.5);
+        elem.setScaleX(new_scale);
+        elem.setScaleY(new_scale);
         break;
     case "zoom out":
-        elem.setScaleX(elem.getScaleX()*nzoom);
-        elem.setScaleY(elem.getScaleY()*nzoom);
+        var new_scale = Math.max(elem.getScaleX() * nzoom, 0.5);
+        elem.setScaleX(new_scale);
+        elem.setScaleY(new_scale);
         break;
     case "rotate right":
         elem.rotate(deg);
